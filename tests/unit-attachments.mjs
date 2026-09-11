@@ -22,11 +22,14 @@ describe("collectCarriedAttachments", () => {
 			attach("a2", "u1", "skill_listing"),
 			attach("a3", "u1", "task_reminder"),
 			attach("a4", "u1", "edited_text_file", "/b.js"),
+			{ type: "attachment", uuid: "a5", parentUuid: "u1", attachment: { type: "hook_additional_context", hookEvent: "UserPromptSubmit", content: ["rule"] } },
 		]);
 		// edited_text_file is deliberately not carried: the edit is already in pi's
 		// history as a tool call, and it usually hangs off a tool-result record that
 		// has no prompt ordinal. See diag/attachment-coverage.mjs.
-		assert.deepEqual(carried.map((c) => c.attachment.filename), ["/a.js"]);
+		// hook_additional_context is: CC replays it on resume, so a rebuild without
+		// it diverges from the cached prefix at that prompt.
+		assert.deepEqual(carried.map((c) => c.attachment.filename ?? c.attachment.type), ["/a.js", "hook_additional_context"]);
 	});
 
 	it("counts ordinals over prompts only, skipping tool-result user records", () => {

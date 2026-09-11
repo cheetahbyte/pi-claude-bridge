@@ -2,6 +2,8 @@
 
 ## UNRELEASED
 
+- **Fix: a rebuild dropped UserPromptSubmit hook output and re-cached the whole conversation** — Claude Code persists a hook's stdout as a `hook_additional_context` attachment and replays it as a system-reminder block on every resume; pi never sees it, so a rebuild (abort, `/compact`, provider switch) wrote every prompt without it and the prompt cache diverged at the first prompt that had one. Captured live with `diag/capture-proxy.mjs`: a rebuild boundary read back only the tools+system prefix. Those attachments are now carried across a rebuild like `@file` expansions; the same boundary now reads back the previous request's full cache.
+
 - **Tests: pin session-resume AskClaude calls to Haiku** — use the same explicit model as the provider turns instead of the moving Opus default; shared-context and isolation assertions remain unchanged.
 
 - **Tests: nested npm installs under `npm test`** — strip the inherited `npm_config_allow_scripts` override from RPC subprocesses so npm reads the original `.npmrc` policy instead of rejecting extension installation with `EALLOWSCRIPTS`.

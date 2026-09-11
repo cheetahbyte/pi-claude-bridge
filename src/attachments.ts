@@ -23,9 +23,14 @@ import { messageContentToText } from "./convert.js";
 // diag/attachment-coverage.mjs). Half-carrying a kind is worse than not claiming
 // it: the ones that slipped through would be an arbitrary subset.
 //
+// `hook_additional_context` is a UserPromptSubmit hook's stdout. CC persists it
+// once and replays it as a system-reminder block on every resume, so dropping
+// it on a rebuild changes every prompt that had one and re-caches the whole
+// conversation. It parents to the prompt record, so the ordinal scheme fits.
+//
 // Everything else CC rewrites every turn (`skill_listing`, `task_reminder`,
 // `agent_listing_delta`, `mcp_instructions_delta`, …) and loses nothing.
-const CONTENT_BEARING = new Set(["file"]);
+const CONTENT_BEARING = new Set(["file", "hook_additional_context"]);
 
 export type CarriedAttachment = {
 	attachment: { type: string; [key: string]: unknown };
