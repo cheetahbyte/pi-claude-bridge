@@ -80,7 +80,9 @@ export function createRpcHarness(opts) {
 		pi = spawn("pi", spawnArgs, {
 			cwd,
 			stdio: ["pipe", "pipe", "pipe"],
-			env: { ...process.env, PATH: cleanPath, CLAUDE_BRIDGE_DEBUG: "1", CLAUDE_BRIDGE_DEBUG_PATH: DEBUG_LOG, ...env },
+			// npm run exports .npmrc policy as an env override, which nested
+			// project installs reject. Let npm read the original .npmrc instead.
+			env: { ...process.env, npm_config_allow_scripts: undefined, PATH: cleanPath, CLAUDE_BRIDGE_DEBUG: "1", CLAUDE_BRIDGE_DEBUG_PATH: DEBUG_LOG, ...env },
 		});
 
 		// The killed subprocess can still flush buffered stdout/stderr after stop()
