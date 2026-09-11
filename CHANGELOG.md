@@ -2,6 +2,8 @@
 
 ## UNRELEASED
 
+- **Tests: pin session-resume AskClaude calls to Haiku** — use the same explicit model as the provider turns instead of the moving Opus default; shared-context and isolation assertions remain unchanged.
+
 - **Tests: nested npm installs under `npm test`** — strip the inherited `npm_config_allow_scripts` override from RPC subprocesses so npm reads the original `.npmrc` policy instead of rejecting extension installation with `EALLOWSCRIPTS`.
 
 - **Fix: git-status changes no longer bust the prompt cache (issue #73)** — the `claude_code` preset embeds a git-status snapshot in the cached system block, so any git transition (new file, staging, commit) rewrote the whole conversation prefix at cache-write rates. The provider path now sets `includeGitInstructions: false`, stripping the block with no other cost.

@@ -168,7 +168,7 @@ try {
 
   console.log("Turn 7: AskClaude shared mode (should see non-provider context)...");
   const text7 = await promptAndWait(
-    'Use the AskClaude tool with prompt="What was the third word mentioned earlier? Reply with just the word."'
+    'Use the AskClaude tool with model="claude-haiku-4-5" and prompt="What was the third word mentioned earlier? Reply with just the word."'
   );
   console.log(`  AskClaude args: ${JSON.stringify(lastToolArgs)}`);
   console.log(`  AskClaude result: ${(lastToolResult || "").slice(0, 120)}`);
@@ -182,7 +182,7 @@ try {
   console.log("Turn 8: AskClaude isolated mode (should not see context)...");
   lastToolResult = null;
   const text8 = await promptAndWait(
-    'Use the AskClaude tool with prompt="What was the third word mentioned earlier? If you don\'t know, say UNKNOWN." and isolated=true'
+    'Use the AskClaude tool with model="claude-haiku-4-5" and prompt="What was the third word mentioned earlier? If you don\'t know, say UNKNOWN." and isolated=true'
   );
   console.log(`  AskClaude args: ${JSON.stringify(lastToolArgs)}`);
   console.log(`  AskClaude result: ${(lastToolResult || "").slice(0, 120)}`);
