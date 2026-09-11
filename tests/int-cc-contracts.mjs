@@ -50,6 +50,8 @@ function providerOptions(extra = {}) {
 		cwd: CWD,
 		model: MODEL,
 		tools: [],
+		// Mirrors src/index.ts PROVIDER_DISALLOWED_TOOLS: LSP survives `tools: []`.
+		disallowedTools: ["LSP"],
 		permissionMode: "bypassPermissions",
 		env: { ...process.env, ENABLE_CLAUDEAI_MCP_SERVERS: "0", DISABLE_AUTO_COMPACT: "1" },
 		extraArgs: { "strict-mcp-config": null },

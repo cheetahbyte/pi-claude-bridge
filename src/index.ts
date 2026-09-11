@@ -181,6 +181,10 @@ function errorMessage(err: unknown): string {
 // AskClaude mode presets — controls which CC tools are blocked per mode.
 // Only block tools that can't work (no pi TUI for user interaction).
 // Other CC tools (Agent, SendMessage, RemoteTrigger, Tasks, etc.) are intentionally not blocked.
+// `tools: []` no longer strips every builtin: the SDK bundled with Claude Code
+// 2.1.14x+ still advertises LSP, which pi does not serve (int-cc-contracts.mjs
+// pins this). Blocked explicitly on the provider path.
+const PROVIDER_DISALLOWED_TOOLS = ["LSP"];
 const ASKCLAUDE_ALWAYS_BLOCKED = [
 	"AskUserQuestion", "EnterPlanMode", "ExitPlanMode",
 	"ToolSearch", // probes for blocked tools, wastes tokens
@@ -486,6 +490,7 @@ async function runIsolatedSummary(
 				env: { ...process.env, ...CC_CHILD_ENV },
 				settings: { autoMemoryEnabled: false },
 				tools: [],
+				disallowedTools: PROVIDER_DISALLOWED_TOOLS,
 				strictMcpConfig: true,
 				settingSources: [] as SettingSource[],
 				skills: [],
@@ -1645,6 +1650,7 @@ function streamClaudeAgentSdk(model: Model<any>, context: Context, options?: Sim
 		cwd,
 		env: childEnv,
 		tools: [],
+		disallowedTools: PROVIDER_DISALLOWED_TOOLS,
 		permissionMode: "bypassPermissions",
 		includePartialMessages: true,
 		// includeGitInstructions:false drops the gitStatus block from the preset.
