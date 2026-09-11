@@ -20,21 +20,30 @@ function deriveMissing<T extends { id: string; [key: string]: any }>(piAiModels:
 
 export const MODEL_IDS_IN_ORDER = ["claude-fable-5-1", "claude-fable-5", "claude-opus-5", "claude-opus-4-8", "claude-opus-4-7", "claude-opus-4-6", "claude-sonnet-5", "claude-sonnet-4-6", "claude-haiku-4-5"];
 
+export type BuildModelsOptions = {
+	// Keep pi-ai's public API per-token rates so pi's footer shows a dollar
+	// estimate. Off by default: the bridge bills against a Claude subscription,
+	// where the figure is a what-if, not a charge (issue #9).
+	apiPricing?: boolean;
+};
+
+const ZERO_COST = { input: 0, output: 0, cacheRead: 0, cacheWrite: 0 };
+
 // Project pi-ai's model entries down to the fields pi's registerProvider expects,
 // and keep MODEL_IDS_IN_ORDER ordering. IDs missing from pi-ai are silently dropped.
 // Context-dependent display labels are applied after plan/long-context config is known.
-export function buildModels<T extends { id: string; [key: string]: any }>(piAiModels: T[]) {
+export function buildModels<T extends { id: string; [key: string]: any }>(piAiModels: T[], options: BuildModelsOptions = {}) {
 	return MODEL_IDS_IN_ORDER
 		.map((id) => piAiModels.find((m) => m.id === id) ?? deriveMissing(piAiModels, id))
 		.filter((m) => m != null)
 		// Forward thinkingLevelMap so pi-ai's per-model overrides (e.g. opus-4-8
 		// mapping xhigh→xhigh and max→max) are visible to the effort lookup.
-		.map(({ id, name, reasoning, input, contextWindow, maxTokens, thinkingLevelMap }) => ({
+		.map(({ id, name, reasoning, input, contextWindow, maxTokens, thinkingLevelMap, cost }) => ({
 			id,
 			name,
 			reasoning, input, contextWindow, maxTokens,
 			thinkingLevelMap,
-			cost: { input: 0, output: 0, cacheRead: 0, cacheWrite: 0 },
+			cost: options.apiPricing && cost ? { ...cost } : { ...ZERO_COST },
 		}));
 }
 

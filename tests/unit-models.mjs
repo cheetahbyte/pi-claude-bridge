@@ -47,10 +47,17 @@ describe("MODELS projection", () => {
 		assert.deepEqual(models.map((m) => m.id), ["claude-haiku-4-5"]);
 	});
 
-	it("zeros out cost regardless of pi-ai pricing", () => {
+	it("zeros out cost by default regardless of pi-ai pricing", () => {
 		const models = buildModels(MODEL_IDS_IN_ORDER.map(mockPiAiModel));
 		for (const m of models) {
 			assert.deepEqual(m.cost, { input: 0, output: 0, cacheRead: 0, cacheWrite: 0 });
+		}
+	});
+
+	it("keeps pi-ai pricing when apiPricing is set", () => {
+		const models = buildModels(MODEL_IDS_IN_ORDER.map(mockPiAiModel), { apiPricing: true });
+		for (const m of models) {
+			assert.deepEqual(m.cost, { input: 1, output: 1 });
 		}
 	});
 

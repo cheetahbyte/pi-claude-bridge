@@ -32,6 +32,10 @@ export interface Config {
 		// Anthropic billing). Enables Sonnet 4.6 [1m] on every plan and Opus 4.6
 		// [1m] on Pro.
 		longContextExtraUsage?: boolean;
+		// Show what each turn would cost at public API rates in pi's footer. Off by
+		// default: subscription usage is not billed per token, so the figure is an
+		// estimate of equivalent API spend, not a charge.
+		showApiCost?: boolean;
 		// Run the Claude Code subprocess with `disableAllHooks`. Off by default so
 		// existing setups keep their CC hooks. Worth turning on: pi is the harness
 		// here, and a UserPromptSubmit hook's output is replayed by CC on resume

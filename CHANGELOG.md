@@ -2,6 +2,8 @@
 
 ## UNRELEASED
 
+- **Add: `provider.showApiCost`** — opt in to pi-ai's public API per-token rates so pi's footer shows an equivalent-API-spend estimate per turn. Default stays zero-cost, since subscription usage is not billed per token (issue #9).
+
 - **Bump: Claude Agent SDK to `^0.3.267` (upstream PR #94)** — updates the bundled Claude Code CLI for newer models, including Fable 5.1; raises `@anthropic-ai/sdk` to `^0.124.0` to satisfy the new peer requirement.
 
 - **Tests: pin session-resume AskClaude calls to Haiku** — use the same explicit model as the provider turns instead of the moving Opus default; shared-context and isolation assertions remain unchanged.

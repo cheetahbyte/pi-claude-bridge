@@ -83,6 +83,7 @@ Config: `~/.pi/agent/claude-bridge.json` (global) or the project Pi config direc
 `provider`:
 - `plan` (default `"pro"`) — set to `"max"` if you have a Max (or Team Premium/Enterprise) Anthropic plan. This enables Opus with 1M context.
 - `longContextExtraUsage` — set to `true` to enable 1M context models even if they cost money through Extra Usage on your plan. It enables Sonnet 4.6 with 1M on every plan and Opus 4.6 with 1M on Pro. Not needed for Opus 4.7 or 4.8.
+- `showApiCost` — set to `true` to show what each turn would cost at public API rates in pi's footer (default `false`). Subscription usage isn't billed per token, so treat the figure as equivalent API spend, not a charge.
 - `strictMcpConfig` — block MCP servers from `~/.claude.json` / `.mcp.json` (default `true`). Cloud MCP (Gmail/Drive via claude.ai OAuth) is always blocked.
 - `autoMemoryEnabled` — enable Claude Code's auto-memory system (default `false`)
 - `disableHooks` — run Claude Code with all hooks disabled (default `false`). Your `~/.claude/settings.json` hooks otherwise fire inside the bridged subprocess; their UserPromptSubmit output is carried across rebuilds, but a session continued in a new pi process (`pi --continue`) cannot carry it and starts with a cold prompt cache.

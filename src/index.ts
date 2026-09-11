@@ -157,7 +157,8 @@ const SDK_TO_PI_TOOL_NAME: Record<string, string> = {
 };
 
 // MODELS is buildModels(getModels("anthropic")) — projection kept in models.js.
-const MODELS = buildModels(getModels("anthropic"));
+// Rebuilt at activation once config says whether to keep API pricing.
+let MODELS = buildModels(getModels("anthropic"));
 let providerSettings: NonNullable<Config["provider"]> = {};
 let longContextSettings: LongContextSettings = { plan: "pro", longContextExtraUsage: false };
 
@@ -2009,6 +2010,7 @@ export default function (pi: ExtensionAPI) {
 		plan: providerSettings.plan ?? "pro",
 		longContextExtraUsage: providerSettings.longContextExtraUsage ?? false,
 	};
+	MODELS = buildModels(getModels("anthropic"), { apiPricing: providerSettings.showApiCost ?? false });
 	const registeredModels = applyLongContext(MODELS, longContextSettings);
 
 	if (!config.startupNoticeShown) {
