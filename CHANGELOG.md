@@ -2,6 +2,8 @@
 
 ## UNRELEASED
 
+- **Bump: Claude Agent SDK to `^0.3.267` (upstream PR #94)** — updates the bundled Claude Code CLI for newer models, including Fable 5.1; raises `@anthropic-ai/sdk` to `^0.124.0` to satisfy the new peer requirement.
+
 - **Tests: pin session-resume AskClaude calls to Haiku** — use the same explicit model as the provider turns instead of the moving Opus default; shared-context and isolation assertions remain unchanged.
 
 - **Tests: nested npm installs under `npm test`** — strip the inherited `npm_config_allow_scripts` override from RPC subprocesses so npm reads the original `.npmrc` policy instead of rejecting extension installation with `EALLOWSCRIPTS`.
