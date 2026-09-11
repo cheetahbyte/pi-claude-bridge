@@ -32,6 +32,12 @@ export interface Config {
 		// Anthropic billing). Enables Sonnet 4.6 [1m] on every plan and Opus 4.6
 		// [1m] on Pro.
 		longContextExtraUsage?: boolean;
+		// Run the Claude Code subprocess with `disableAllHooks`. Off by default so
+		// existing setups keep their CC hooks. Worth turning on: pi is the harness
+		// here, and a UserPromptSubmit hook's output is replayed by CC on resume
+		// but is invisible to pi, so a rebuild with no prior CC session to carry
+		// it from (`pi --continue`) starts cold at the first prompt that had one.
+		disableHooks?: boolean;
 	};
 }
 
@@ -45,8 +51,11 @@ export function tryParseJson(path: string): Partial<Config> {
 	}
 }
 
-export function claudeCodeSettings(provider: Config["provider"] = {}): { autoMemoryEnabled: boolean } {
-	return { autoMemoryEnabled: provider.autoMemoryEnabled ?? false };
+export function claudeCodeSettings(provider: Config["provider"] = {}): { autoMemoryEnabled: boolean; disableAllHooks: boolean } {
+	return {
+		autoMemoryEnabled: provider.autoMemoryEnabled ?? false,
+		disableAllHooks: provider.disableHooks ?? false,
+	};
 }
 
 export function globalConfigPath(): string {

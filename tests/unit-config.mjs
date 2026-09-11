@@ -21,12 +21,12 @@ function withTempHome(fn) {
 }
 
 describe("claudeCodeSettings", () => {
-	it("disables auto-memory by default", () => {
-		assert.deepEqual(claudeCodeSettings(), { autoMemoryEnabled: false });
+	it("disables auto-memory and keeps hooks by default", () => {
+		assert.deepEqual(claudeCodeSettings(), { autoMemoryEnabled: false, disableAllHooks: false });
 	});
 
-	it("allows auto-memory to be enabled", () => {
-		assert.deepEqual(claudeCodeSettings({ autoMemoryEnabled: true }), { autoMemoryEnabled: true });
+	it("allows auto-memory to be enabled and hooks to be disabled", () => {
+		assert.deepEqual(claudeCodeSettings({ autoMemoryEnabled: true, disableHooks: true }), { autoMemoryEnabled: true, disableAllHooks: true });
 	});
 });
 

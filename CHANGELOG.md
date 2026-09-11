@@ -2,6 +2,8 @@
 
 ## UNRELEASED
 
+- **Add: `provider.disableHooks`** — run Claude Code with `disableAllHooks`. Off by default. Useful under pi, which is the harness here, and it also protects the one rebuild that has no prior CC session to carry hook output from (`pi --continue` into a bridged session).
+
 - **Fix: Claude Code 2.1.14x+ still advertised its `LSP` tool to the provider path** — `tools: []` no longer strips it, so the model could call a tool pi does not serve. Blocked with `disallowedTools`; `tests/int-cc-contracts.mjs` pins it.
 
 - **Fix: a rebuild dropped UserPromptSubmit hook output and re-cached the whole conversation** — Claude Code persists a hook's stdout as a `hook_additional_context` attachment and replays it as a system-reminder block on every resume; pi never sees it, so a rebuild (abort, `/compact`, provider switch) wrote every prompt without it and the prompt cache diverged at the first prompt that had one. Captured live with `diag/capture-proxy.mjs`: a rebuild boundary read back only the tools+system prefix. Those attachments are now carried across a rebuild like `@file` expansions; the same boundary now reads back the previous request's full cache.
